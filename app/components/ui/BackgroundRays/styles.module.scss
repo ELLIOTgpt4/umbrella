@@ -43,38 +43,38 @@
 
 .ray1 {
   width: 800px;
-  height: 1000px;
+  height: 1200px; // Increased height to extend to the bottom
   background: var(--ray-gradient-primary);
   transform: rotate(65deg);
-  top: -300px;
+  top: -400px; // Adjusted to start higher
   left: -200px;
-  filter: blur(120px) drop-shadow(0 0 20px var(--ray-color-primary)); // Increased blur for blending
+  filter: blur(120px) drop-shadow(0 0 20px var(--ray-color-primary));
   opacity: 0.7;
-  animation: float1 12s infinite ease-in-out; // Slower for smoother transitions
+  animation: float1 12s infinite ease-in-out;
 }
 
 .ray2 {
   width: 600px;
-  height: 800px;
+  height: 1000px; // Increased height to extend to the bottom
   background: var(--ray-gradient-secondary);
   transform: rotate(-30deg);
-  top: -200px;
+  top: -300px; // Adjusted to start higher
   left: 400px;
-  filter: blur(100px) drop-shadow(0 0 15px var(--ray-color-secondary)); // Increased blur for blending
+  filter: blur(100px) drop-shadow(0 0 15px var(--ray-color-secondary));
   opacity: 0.7;
-  animation: float2 14s infinite ease-in-out; // Slower for smoother transitions
+  animation: float2 14s infinite ease-in-out;
 }
 
 .ray3 {
   width: 700px;
-  height: 900px;
+  height: 1100px; // Increased height to extend to the bottom
   background: var(--ray-gradient-accent);
   transform: rotate(10deg);
-  top: -400px;
+  top: -500px; // Adjusted to start higher
   left: 1000px;
-  filter: blur(110px) drop-shadow(0 0 20px var(--ray-color-accent)); // Increased blur for blending
+  filter: blur(110px) drop-shadow(0 0 20px var(--ray-color-accent));
   opacity: 0.6;
-  animation: float3 16s infinite ease-in-out; // Slower for smoother transitions
+  animation: float3 16s infinite ease-in-out;
 }
 
 @keyframes float1 {
@@ -83,13 +83,13 @@
     transform: rotate(65deg) translate(0, 0);
   }
   25% {
-    transform: rotate(70deg) translate(50px, 30px); // Smoother movement
+    transform: rotate(70deg) translate(50px, 30px);
   }
   50% {
-    transform: rotate(60deg) translate(-40px, 60px); // Smoother movement
+    transform: rotate(60deg) translate(-40px, 60px);
   }
   75% {
-    transform: rotate(68deg) translate(-60px, 20px); // Smoother movement
+    transform: rotate(68deg) translate(-60px, 20px);
   }
 }
 
@@ -99,10 +99,10 @@
     transform: rotate(-30deg) scale(1);
   }
   33% {
-    transform: rotate(-25deg) scale(1.1); // Smoother scaling
+    transform: rotate(-25deg) scale(1.1);
   }
   66% {
-    transform: rotate(-35deg) scale(0.95); // Smoother scaling
+    transform: rotate(-35deg) scale(0.95);
   }
 }
 
@@ -112,10 +112,10 @@
     transform: translate(0, 0) rotate(0deg);
   }
   25% {
-    transform: translate(60px, 30px) rotate(10deg); // Smoother movement
+    transform: translate(60px, 30px) rotate(10deg);
   }
   75% {
-    transform: translate(-50px, 60px) rotate(-10deg); // Smoother movement
+    transform: translate(-50px, 60px) rotate(-10deg);
   }
 }
 
