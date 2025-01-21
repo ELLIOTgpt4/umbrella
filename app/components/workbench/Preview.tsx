@@ -4,7 +4,6 @@ import { IconButton } from '~/components/ui/IconButton';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { PortDropdown } from './PortDropdown';
 import { ScreenshotSelector } from './ScreenshotSelector';
-import { debounce } from 'lodash'; // Import debounce for smoother resizing
 
 type ResizeSide = 'left' | 'right' | null;
 
@@ -23,17 +22,12 @@ export const Preview = memo(() => {
   const [url, setUrl] = useState('');
   const [iframeUrl, setIframeUrl] = useState<string | undefined>();
   const [isSelectionMode, setIsSelectionMode] = useState(false);
-  const [iframeError, setIframeError] = useState(false); // For iframe error handling
-  const [isLoading, setIsLoading] = useState(true); // For loading state
 
   // Toggle between responsive mode and device mode
   const [isDeviceModeOn, setIsDeviceModeOn] = useState(false);
 
   // Use percentage for width
-  const [widthPercent, setWidthPercent] = useState<number>(() => {
-    const savedWidthPercent = localStorage.getItem('previewWidthPercent');
-    return savedWidthPercent ? parseFloat(savedWidthPercent) : 37.5; // Default to 37.5%
-  });
+  const [widthPercent, setWidthPercent] = useState<number>(37.5); // 375px assuming 1000px window width initially
 
   const resizingState = useRef({
     isResizing: false,
@@ -50,6 +44,7 @@ export const Preview = memo(() => {
     if (!activePreview) {
       setUrl('');
       setIframeUrl(undefined);
+
       return;
     }
 
@@ -66,14 +61,13 @@ export const Preview = memo(() => {
 
       const { baseUrl } = activePreview;
 
-      try {
-        const url = new URL(value);
-        const base = new URL(baseUrl);
-
-        return url.origin === base.origin && url.pathname.startsWith(base.pathname);
-      } catch (e) {
-        return false;
+      if (value === baseUrl) {
+        return true;
+      } else if (value.startsWith(baseUrl)) {
+        return ['/', '?', '#'].includes(value.charAt(baseUrl.length));
       }
+
+      return false;
     },
     [activePreview],
   );
@@ -93,21 +87,19 @@ export const Preview = memo(() => {
     }
   }, [previews, findMinPortIndex]);
 
-  const reloadPreview = useCallback(() => {
+  const reloadPreview = () => {
     if (iframeRef.current) {
       iframeRef.current.src = iframeRef.current.src;
-      setIsLoading(true); // Reset loading state
-      setIframeError(false); // Reset error state
     }
-  }, []);
+  };
 
-  const toggleFullscreen = useCallback(async () => {
+  const toggleFullscreen = async () => {
     if (!isFullscreen && containerRef.current) {
       await containerRef.current.requestFullscreen();
     } else if (document.fullscreenElement) {
       await document.exitFullscreen();
     }
-  }, [isFullscreen]);
+  };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -145,7 +137,7 @@ export const Preview = memo(() => {
     e.preventDefault(); // Prevent any text selection on mousedown
   };
 
-  const onMouseMove = debounce((e: MouseEvent) => {
+  const onMouseMove = (e: MouseEvent) => {
     if (!resizingState.current.isResizing) {
       return;
     }
@@ -168,7 +160,7 @@ export const Preview = memo(() => {
     newWidthPercent = Math.max(10, Math.min(newWidthPercent, 90));
 
     setWidthPercent(newWidthPercent);
-  }, 16); // 16ms for ~60fps
+  };
 
   const onMouseUp = () => {
     resizingState.current.isResizing = false;
@@ -195,54 +187,6 @@ export const Preview = memo(() => {
       window.removeEventListener('resize', handleWindowResize);
     };
   }, []);
-
-  // Save widthPercent to localStorage
-  useEffect(() => {
-    localStorage.setItem('previewWidthPercent', widthPercent.toString());
-  }, [widthPercent]);
-
-  // Handle iframe errors
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-
-    const handleError = () => setIframeError(true);
-    iframe.addEventListener('error', handleError);
-
-    return () => {
-      iframe.removeEventListener('error', handleError);
-    };
-  }, []);
-
-  // Handle iframe load
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-
-    const handleLoad = () => setIsLoading(false);
-    iframe.addEventListener('load', handleLoad);
-
-    return () => {
-      iframe.removeEventListener('load', handleLoad);
-    };
-  }, []);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'r' && (e.ctrlKey || e.metaKey)) {
-        reloadPreview();
-      } else if (e.key === 'f' && (e.ctrlKey || e.metaKey)) {
-        toggleFullscreen();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [reloadPreview, toggleFullscreen]);
 
   // A small helper component for the handle's "grip" icon
   const GripIcon = () => (
@@ -275,12 +219,11 @@ export const Preview = memo(() => {
         <div className="z-iframe-overlay w-full h-full absolute" onClick={() => setIsPortDropdownOpen(false)} />
       )}
       <div className="bg-bolt-elements-background-depth-2 p-2 flex items-center gap-1.5">
-        <IconButton icon="i-ph:arrow-clockwise" onClick={reloadPreview} aria-label="Reload preview" />
+        <IconButton icon="i-ph:arrow-clockwise" onClick={reloadPreview} />
         <IconButton
           icon="i-ph:selection"
           onClick={() => setIsSelectionMode(!isSelectionMode)}
           className={isSelectionMode ? 'bg-bolt-elements-background-depth-3' : ''}
-          aria-label="Toggle selection mode"
         />
         <div
           className="flex items-center gap-1 flex-grow bg-bolt-elements-preview-addressBar-background border border-bolt-elements-borderColor text-bolt-elements-preview-addressBar-text rounded-full px-3 py-1 text-sm hover:bg-bolt-elements-preview-addressBar-backgroundHover hover:focus-within:bg-bolt-elements-preview-addressBar-backgroundActive focus-within:bg-bolt-elements-preview-addressBar-backgroundActive
@@ -346,27 +289,13 @@ export const Preview = memo(() => {
         >
           {activePreview ? (
             <>
-              {iframeError ? (
-                <div className="flex w-full h-full justify-center items-center bg-white">
-                  Failed to load preview. <button onClick={reloadPreview}>Retry</button>
-                </div>
-              ) : (
-                <>
-                  {isLoading && (
-                    <div className="flex w-full h-full justify-center items-center bg-white">
-                      Loading preview...
-                    </div>
-                  )}
-                  <iframe
-                    ref={iframeRef}
-                    title="preview"
-                    className="border-none w-full h-full bg-white"
-                    src={iframeUrl}
-                    allowFullScreen
-                    aria-label="Preview of the generated code"
-                  />
-                </>
-              )}
+              <iframe
+                ref={iframeRef}
+                title="preview"
+                className="border-none w-full h-full bg-white"
+                src={iframeUrl}
+                allowFullScreen
+              />
               <ScreenshotSelector
                 isSelectionMode={isSelectionMode}
                 setIsSelectionMode={setIsSelectionMode}
