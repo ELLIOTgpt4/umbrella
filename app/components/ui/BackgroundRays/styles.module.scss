@@ -1,12 +1,13 @@
 .rayContainer {
-  // Reversed colors
-  --ray-color-primary: color-mix(in srgb, #f59e0b, transparent 20%); // Yellow (previously Accent)
-  --ray-color-secondary: color-mix(in srgb, #3b82f6, transparent 20%); // Blue (previously Primary)
-  --ray-color-accent: color-mix(in srgb, #ec4899, transparent 20%); // Pink (previously Secondary)
+  // Reversed colors with higher transparency for blending
+  --ray-color-primary: color-mix(in srgb, #f59e0b, transparent 40%); // Yellow (previously Accent)
+  --ray-color-secondary: color-mix(in srgb, #3b82f6, transparent 40%); // Blue (previously Primary)
+  --ray-color-accent: color-mix(in srgb, #ec4899, transparent 40%); // Pink (previously Secondary)
 
-  --ray-gradient-primary: radial-gradient(var(--ray-color-primary) 0%, transparent 70%);
-  --ray-gradient-secondary: radial-gradient(var(--ray-color-secondary) 0%, transparent 70%);
-  --ray-gradient-accent: radial-gradient(var(--ray-color-accent) 0%, transparent 70%);
+  // Smoother gradients for seamless blending
+  --ray-gradient-primary: radial-gradient(var(--ray-color-primary) 0%, transparent 80%);
+  --ray-gradient-secondary: radial-gradient(var(--ray-color-secondary) 0%, transparent 80%);
+  --ray-gradient-accent: radial-gradient(var(--ray-color-accent) 0%, transparent 80%);
 
   position: fixed;
   inset: 0;
@@ -47,9 +48,9 @@
   transform: rotate(65deg);
   top: -300px;
   left: -200px;
-  filter: blur(100px) drop-shadow(0 0 20px var(--ray-color-primary));
+  filter: blur(120px) drop-shadow(0 0 20px var(--ray-color-primary)); // Increased blur for blending
   opacity: 0.7;
-  animation: float1 10s infinite cubic-bezier(0.4, 0, 0.6, 1); // Faster and impulsive
+  animation: float1 12s infinite ease-in-out; // Slower for smoother transitions
 }
 
 .ray2 {
@@ -59,9 +60,9 @@
   transform: rotate(-30deg);
   top: -200px;
   left: 400px;
-  filter: blur(80px) drop-shadow(0 0 15px var(--ray-color-secondary));
+  filter: blur(100px) drop-shadow(0 0 15px var(--ray-color-secondary)); // Increased blur for blending
   opacity: 0.7;
-  animation: float2 12s infinite cubic-bezier(0.4, 0, 0.6, 1); // Faster and impulsive
+  animation: float2 14s infinite ease-in-out; // Slower for smoother transitions
 }
 
 .ray3 {
@@ -71,9 +72,9 @@
   transform: rotate(10deg);
   top: -400px;
   left: 1000px;
-  filter: blur(90px) drop-shadow(0 0 20px var(--ray-color-accent));
+  filter: blur(110px) drop-shadow(0 0 20px var(--ray-color-accent)); // Increased blur for blending
   opacity: 0.6;
-  animation: float3 15s infinite cubic-bezier(0.4, 0, 0.6, 1); // Faster and impulsive
+  animation: float3 16s infinite ease-in-out; // Slower for smoother transitions
 }
 
 @keyframes float1 {
@@ -82,13 +83,13 @@
     transform: rotate(65deg) translate(0, 0);
   }
   25% {
-    transform: rotate(70deg) translate(100px, 50px); // Sharper movement
+    transform: rotate(70deg) translate(50px, 30px); // Smoother movement
   }
   50% {
-    transform: rotate(60deg) translate(-80px, 100px); // Sharper movement
+    transform: rotate(60deg) translate(-40px, 60px); // Smoother movement
   }
   75% {
-    transform: rotate(68deg) translate(-120px, 40px); // Sharper movement
+    transform: rotate(68deg) translate(-60px, 20px); // Smoother movement
   }
 }
 
@@ -98,10 +99,10 @@
     transform: rotate(-30deg) scale(1);
   }
   33% {
-    transform: rotate(-25deg) scale(1.2); // Sharper scaling
+    transform: rotate(-25deg) scale(1.1); // Smoother scaling
   }
   66% {
-    transform: rotate(-35deg) scale(0.9); // Sharper scaling
+    transform: rotate(-35deg) scale(0.95); // Smoother scaling
   }
 }
 
@@ -111,10 +112,10 @@
     transform: translate(0, 0) rotate(0deg);
   }
   25% {
-    transform: translate(100px, 50px) rotate(20deg); // Sharper movement
+    transform: translate(60px, 30px) rotate(10deg); // Smoother movement
   }
   75% {
-    transform: translate(-80px, 100px) rotate(-20deg); // Sharper movement
+    transform: translate(-50px, 60px) rotate(-10deg); // Smoother movement
   }
 }
 
