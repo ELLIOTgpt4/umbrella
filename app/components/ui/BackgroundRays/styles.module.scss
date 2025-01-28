@@ -1,13 +1,13 @@
 .rayContainer {
-  // Reversed colors with higher transparency for blending
-  --ray-color-primary: color-mix(in srgb, #f59e0b, transparent 40%); // Yellow (previously Accent)
-  --ray-color-secondary: color-mix(in srgb, #3b82f6, transparent 40%); // Blue (previously Primary)
-  --ray-color-accent: color-mix(in srgb, #ec4899, transparent 40%); // Pink (previously Secondary)
+  // Theme-specific colors
+  --ray-color-primary: color-mix(in srgb, var(--primary-color), transparent 30%);
+  --ray-color-secondary: color-mix(in srgb, var(--secondary-color), transparent 30%);
+  --ray-color-accent: color-mix(in srgb, var(--accent-color), transparent 30%);
 
-  // Smoother gradients for seamless blending
-  --ray-gradient-primary: radial-gradient(var(--ray-color-primary) 0%, transparent 80%);
-  --ray-gradient-secondary: radial-gradient(var(--ray-color-secondary) 0%, transparent 80%);
-  --ray-gradient-accent: radial-gradient(var(--ray-color-accent) 0%, transparent 80%);
+  // Theme-specific gradients
+  --ray-gradient-primary: radial-gradient(var(--ray-color-primary) 0%, transparent 70%);
+  --ray-gradient-secondary: radial-gradient(var(--ray-color-secondary) 0%, transparent 70%);
+  --ray-gradient-accent: radial-gradient(var(--ray-color-accent) 0%, transparent 70%);
 
   position: fixed;
   inset: 0;
@@ -15,66 +15,123 @@
   animation: fadeIn 1.5s ease-out;
   pointer-events: none;
   z-index: 0;
+  //   background-color: transparent;
 
   :global(html[data-theme='dark']) & {
-    mix-blend-mode: lighten;
+    mix-blend-mode: screen;
   }
 
   :global(html[data-theme='light']) & {
-    mix-blend-mode: darken;
-    opacity: 0.6;
+    mix-blend-mode: multiply;
   }
 }
 
 .lightRay {
   position: absolute;
   border-radius: 100%;
-  will-change: transform, opacity;
 
   :global(html[data-theme='dark']) & {
-    mix-blend-mode: lighten;
+    mix-blend-mode: screen;
   }
 
   :global(html[data-theme='light']) & {
-    mix-blend-mode: darken;
-    opacity: 0.6;
+    mix-blend-mode: multiply;
+    opacity: 0.4;
   }
 }
 
 .ray1 {
-  width: 800px;
-  height: 1200px; // Increased height to extend to the bottom
+  width: 600px;
+  height: 800px;
   background: var(--ray-gradient-primary);
   transform: rotate(65deg);
-  top: -400px; // Adjusted to start higher
-  left: -200px;
-  filter: blur(120px) drop-shadow(0 0 20px var(--ray-color-primary));
-  opacity: 0.7;
-  animation: float1 12s infinite ease-in-out;
+  top: -500px;
+  left: -100px;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: float1 15s infinite ease-in-out;
 }
 
 .ray2 {
-  width: 600px;
-  height: 1000px; // Increased height to extend to the bottom
+  width: 400px;
+  height: 600px;
   background: var(--ray-gradient-secondary);
   transform: rotate(-30deg);
-  top: -300px; // Adjusted to start higher
-  left: 400px;
-  filter: blur(100px) drop-shadow(0 0 15px var(--ray-color-secondary));
-  opacity: 0.7;
-  animation: float2 14s infinite ease-in-out;
+  top: -300px;
+  left: 200px;
+  filter: blur(60px);
+  opacity: 0.6;
+  animation: float2 18s infinite ease-in-out;
 }
 
 .ray3 {
-  width: 700px;
-  height: 1100px; // Increased height to extend to the bottom
+  width: 500px;
+  height: 400px;
   background: var(--ray-gradient-accent);
-  transform: rotate(10deg);
-  top: -500px; // Adjusted to start higher
+  top: -320px;
+  left: 500px;
+  filter: blur(65px);
+  opacity: 0.5;
+  animation: float3 20s infinite ease-in-out;
+}
+
+.ray4 {
+  width: 400px;
+  height: 450px;
+  background: var(--ray-gradient-secondary);
+  top: -350px;
+  left: 800px;
+  filter: blur(55px);
+  opacity: 0.55;
+  animation: float4 17s infinite ease-in-out;
+}
+
+.ray5 {
+  width: 350px;
+  height: 500px;
+  background: var(--ray-gradient-primary);
+  transform: rotate(-45deg);
+  top: -250px;
   left: 1000px;
-  filter: blur(110px) drop-shadow(0 0 20px var(--ray-color-accent));
+  filter: blur(45px);
   opacity: 0.6;
-  animation: float3 16s infinite ease-in-out;
+  animation: float5 16s infinite ease-in-out;
+}
+
+.ray6 {
+  width: 300px;
+  height: 700px;
+  background: var(--ray-gradient-accent);
+  transform: rotate(75deg);
+  top: -400px;
+  left: 600px;
+  filter: blur(75px);
+  opacity: 0.45;
+  animation: float6 19s infinite ease-in-out;
+}
+
+.ray7 {
+  width: 450px;
+  height: 600px;
+  background: var(--ray-gradient-primary);
+  transform: rotate(45deg);
+  top: -450px;
+  left: 350px;
+  filter: blur(65px);
+  opacity: 0.55;
+  animation: float7 21s infinite ease-in-out;
+}
+
+.ray8 {
+  width: 380px;
+  height: 550px;
+  background: var(--ray-gradient-secondary);
+  transform: rotate(-60deg);
+  top: -380px;
+  left: 750px;
+  filter: blur(58px);
+  opacity: 0.6;
+  animation: float8 14s infinite ease-in-out;
 }
 
 @keyframes float1 {
@@ -83,13 +140,13 @@
     transform: rotate(65deg) translate(0, 0);
   }
   25% {
-    transform: rotate(70deg) translate(50px, 30px);
+    transform: rotate(70deg) translate(30px, 20px);
   }
   50% {
-    transform: rotate(60deg) translate(-40px, 60px);
+    transform: rotate(60deg) translate(-20px, 40px);
   }
   75% {
-    transform: rotate(68deg) translate(-60px, 20px);
+    transform: rotate(68deg) translate(-40px, 10px);
   }
 }
 
@@ -112,10 +169,70 @@
     transform: translate(0, 0) rotate(0deg);
   }
   25% {
-    transform: translate(60px, 30px) rotate(10deg);
+    transform: translate(40px, 20px) rotate(5deg);
   }
   75% {
-    transform: translate(-50px, 60px) rotate(-10deg);
+    transform: translate(-30px, 40px) rotate(-5deg);
+  }
+}
+
+@keyframes float4 {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(10deg);
+  }
+}
+
+@keyframes float5 {
+  0%,
+  100% {
+    transform: rotate(-45deg) translate(0, 0);
+  }
+  33% {
+    transform: rotate(-40deg) translate(25px, -20px);
+  }
+  66% {
+    transform: rotate(-50deg) translate(-25px, 20px);
+  }
+}
+
+@keyframes float6 {
+  0%,
+  100% {
+    transform: rotate(75deg) scale(1);
+    filter: blur(75px);
+  }
+  50% {
+    transform: rotate(85deg) scale(1.1);
+    filter: blur(65px);
+  }
+}
+
+@keyframes float7 {
+  0%,
+  100% {
+    transform: rotate(45deg) translate(0, 0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: rotate(40deg) translate(-30px, 30px);
+    opacity: 0.65;
+  }
+}
+
+@keyframes float8 {
+  0%,
+  100% {
+    transform: rotate(-60deg) scale(1);
+  }
+  25% {
+    transform: rotate(-55deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(-65deg) scale(0.95);
   }
 }
 
