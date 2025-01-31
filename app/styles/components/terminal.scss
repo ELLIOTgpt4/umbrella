@@ -1,3 +1,17 @@
+// components/terminal.scss
+@use '../variables' as *;
+
 .xterm {
-  padding: 1rem;
+  padding: var(--space-md);
+  background: rgb(var(--color-surface));
+  border-radius: var(--radius-lg);
+  border: 1px solid rgb(var(--color-border));
+  
+  .xterm-viewport {
+    border-radius: var(--radius-md);
+  }
+  
+  .xterm-screen {
+    padding: var(--space-sm);
+  }
 }
