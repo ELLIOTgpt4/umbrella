@@ -1,9 +1,29 @@
-.actions .shiki {
-  background-color: var(--bolt-elements-actions-code-background) !important;
-}
+// components/code.scss
+@use '../variables' as *;
+@use '../animations';
 
 .shiki {
+  @include animations.transition-fast;
+  border-radius: var(--radius-md);
+  border: 1px solid rgb(var(--color-border));
+  margin: var(--space-md) 0;
+  
+  .actions & {
+    background-color: rgb(var(--color-surface)) !important;
+  }
+
   &:not(:has(.actions), .actions *) {
-    background-color: var(--bolt-elements-messages-code-background) !important;
+    background-color: rgba(var(--color-primary), 0.05) !important;
+  }
+
+  pre {
+    padding: var(--space-md);
+    overflow-x: auto;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 }
