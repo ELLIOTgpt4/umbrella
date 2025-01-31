@@ -3,27 +3,19 @@ import { memo, useEffect, useState } from 'react';
 import { themeStore, toggleTheme } from '~/lib/stores/theme';
 import { IconButton } from './IconButton';
 
-interface ThemeSwitchProps {
-  className?: string;
-}
-
-export const ThemeSwitch = memo(({ className }: ThemeSwitchProps) => {
+export const ThemeSwitch = memo(() => {
   const theme = useStore(themeStore);
-  const [domLoaded, setDomLoaded] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
-  return (
-    domLoaded && (
-      <IconButton
-        className={className}
-        icon={theme === 'dark' ? 'i-ph-sun-dim-duotone' : 'i-ph-moon-stars-duotone'}
-        size="xl"
-        title="Toggle Theme"
-        onClick={toggleTheme}
-      />
-    )
-  );
+  return mounted ? (
+    <IconButton
+      icon={theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'}
+      size="lg"
+      title="Toggle theme"
+      onClick={toggleTheme}
+      className="text-foreground-muted hover:text-foreground"
+    />
+  ) : null;
 });
