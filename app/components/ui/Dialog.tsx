@@ -2,38 +2,24 @@ import * as RadixDialog from '@radix-ui/react-dialog';
 import { motion, type Variants } from 'framer-motion';
 import React, { memo, type ReactNode } from 'react';
 import { classNames } from '~/utils/classNames';
-import { cubicEasingFn } from '~/utils/easings';
 import { IconButton } from './IconButton';
 
 export { Close as DialogClose, Root as DialogRoot } from '@radix-ui/react-dialog';
 
-const transition = {
-  duration: 0.15,
-  ease: cubicEasingFn,
-};
+const transition = { duration: 0.15 };
 
 export const dialogBackdropVariants = {
-  closed: {
-    opacity: 0,
-    transition,
-  },
-  open: {
-    opacity: 1,
-    transition,
-  },
+  closed: { opacity: 0, transition },
+  open: { opacity: 1, transition },
 } satisfies Variants;
 
 export const dialogVariants = {
   closed: {
-    x: '-50%',
-    y: '-40%',
-    scale: 0.96,
+    scale: 0.95,
     opacity: 0,
     transition,
   },
   open: {
-    x: '-50%',
-    y: '-50%',
     scale: 1,
     opacity: 1,
     transition,
@@ -41,24 +27,21 @@ export const dialogVariants = {
 } satisfies Variants;
 
 interface DialogButtonProps {
-  type: 'primary' | 'secondary' | 'danger';
+  variant?: 'primary' | 'secondary' | 'ghost';
   children: ReactNode;
   onClick?: (event: React.UIEvent) => void;
 }
 
-export const DialogButton = memo(({ type, children, onClick }: DialogButtonProps) => {
+export const DialogButton = memo(({ variant = 'primary', children, onClick }: DialogButtonProps) => {
   return (
     <button
       className={classNames(
-        'inline-flex h-[35px] items-center justify-center rounded-lg px-4 text-sm leading-none focus:outline-none',
+        'inline-flex items-center justify-center rounded-lg px-4 h-10 text-sm font-medium transition-colors',
         {
-          'bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text hover:bg-bolt-elements-button-primary-backgroundHover':
-            type === 'primary',
-          'bg-bolt-elements-button-secondary-background text-bolt-elements-button-secondary-text hover:bg-bolt-elements-button-secondary-backgroundHover':
-            type === 'secondary',
-          'bg-bolt-elements-button-danger-background text-bolt-elements-button-danger-text hover:bg-bolt-elements-button-danger-backgroundHover':
-            type === 'danger',
-        },
+          'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'primary',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
+          'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
+        }
       )}
       onClick={onClick}
     >
@@ -71,8 +54,8 @@ export const DialogTitle = memo(({ className, children, ...props }: RadixDialog.
   return (
     <RadixDialog.Title
       className={classNames(
-        'px-5 py-4 flex items-center justify-between border-b border-bolt-elements-borderColor text-lg font-semibold leading-6 text-bolt-elements-textPrimary',
-        className,
+        'px-6 py-4 flex items-center justify-between border-b border-border text-lg font-semibold',
+        className
       )}
       {...props}
     >
@@ -84,7 +67,7 @@ export const DialogTitle = memo(({ className, children, ...props }: RadixDialog.
 export const DialogDescription = memo(({ className, children, ...props }: RadixDialog.DialogDescriptionProps) => {
   return (
     <RadixDialog.Description
-      className={classNames('px-5 py-4 text-bolt-elements-textPrimary text-md', className)}
+      className={classNames('px-6 py-4 text-foreground text-md leading-relaxed', className)}
       {...props}
     >
       {children}
@@ -93,29 +76,38 @@ export const DialogDescription = memo(({ className, children, ...props }: RadixD
 });
 
 interface DialogProps {
-  children: ReactNode | ReactNode[];
+  children: ReactNode;
   className?: string;
-  onBackdrop?: (event: React.UIEvent) => void;
-  onClose?: (event: React.UIEvent) => void;
+  size?: 'sm' | 'md' | 'lg';
+  onClose?: () => void;
 }
 
-export const Dialog = memo(({ className, children, onBackdrop, onClose }: DialogProps) => {
+export const Dialog = memo(({ className, children, size = 'md', onClose }: DialogProps) => {
+  const sizes = {
+    sm: 'max-w-[400px]',
+    md: 'max-w-[600px]',
+    lg: 'max-w-[800px]',
+  };
+
   return (
     <RadixDialog.Portal>
-      <RadixDialog.Overlay onClick={onBackdrop} asChild>
+      <RadixDialog.Overlay asChild>
         <motion.div
-          className="bg-black/50 fixed inset-0 z-max"
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm"
           initial="closed"
           animate="open"
           exit="closed"
           variants={dialogBackdropVariants}
         />
       </RadixDialog.Overlay>
+
       <RadixDialog.Content asChild>
         <motion.div
           className={classNames(
-            'fixed top-[50%] left-[50%] z-max max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] border border-bolt-elements-borderColor rounded-lg bg-bolt-elements-background-depth-2 shadow-lg focus:outline-none overflow-hidden',
-            className,
+            'fixed top-1/2 left-1/2 z-modal w-[95vw] max-h-[85vh] bg-background shadow-lg rounded-xl',
+            'border border-border focus:outline-none overflow-hidden',
+            sizes[size],
+            className
           )}
           initial="closed"
           animate="open"
@@ -124,7 +116,11 @@ export const Dialog = memo(({ className, children, onBackdrop, onClose }: Dialog
         >
           {children}
           <RadixDialog.Close asChild onClick={onClose}>
-            <IconButton icon="i-ph:x" className="absolute top-[10px] right-[10px]" />
+            <IconButton 
+              icon="i-lucide-x" 
+              className="absolute top-4 right-4 h-8 w-8 hover:bg-accent" 
+              size="lg"
+            />
           </RadixDialog.Close>
         </motion.div>
       </RadixDialog.Content>
