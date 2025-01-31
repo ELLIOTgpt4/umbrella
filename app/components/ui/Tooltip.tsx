@@ -6,27 +6,14 @@ interface TooltipProps {
   children: ReactElement;
   sideOffset?: number;
   className?: string;
-  arrowClassName?: string;
-  tooltipStyle?: React.CSSProperties;
   position?: 'top' | 'bottom' | 'left' | 'right';
-  maxWidth?: number;
   delay?: number;
 }
 
 const WithTooltip = forwardRef(
   (
-    {
-      tooltip,
-      children,
-      sideOffset = 5,
-      className = '',
-      arrowClassName = '',
-      tooltipStyle = {},
-      position = 'top',
-      maxWidth = 250,
-      delay = 0,
-    }: TooltipProps,
-    _ref: ForwardedRef<HTMLElement>,
+    { tooltip, children, sideOffset = 8, className, position = 'top', delay = 100 }: TooltipProps,
+    _ref: ForwardedRef<HTMLElement>
   ) => {
     return (
       <Tooltip.Root delayDuration={delay}>
@@ -34,46 +21,19 @@ const WithTooltip = forwardRef(
         <Tooltip.Portal>
           <Tooltip.Content
             side={position}
-            className={`
-              z-[2000]
-              px-2.5
-              py-1.5
-              max-h-[300px]
-              select-none
-              rounded-md
-              bg-bolt-elements-background-depth-3
-              text-bolt-elements-textPrimary
-              text-sm
-              leading-tight
-              shadow-lg
-              animate-in
-              fade-in-0
-              zoom-in-95
-              data-[state=closed]:animate-out
-              data-[state=closed]:fade-out-0
-              data-[state=closed]:zoom-out-95
-              ${className}
-            `}
             sideOffset={sideOffset}
-            style={{
-              maxWidth,
-              ...tooltipStyle,
-            }}
+            className={classNames(
+              'z-tooltip max-w-[240px] px-3 py-2 rounded-md text-sm',
+              'bg-popover text-popover-foreground shadow-md',
+              'animate-in fade-in-0 zoom-in-95',
+              className
+            )}
           >
-            <div className="break-words">{tooltip}</div>
-            <Tooltip.Arrow
-              className={`
-                fill-bolt-elements-background-depth-3
-                ${arrowClassName}
-              `}
-              width={12}
-              height={6}
-            />
+            {tooltip}
+            <Tooltip.Arrow className="fill-popover" width={12} height={6} />
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>
     );
-  },
+  }
 );
-
-export default WithTooltip;
