@@ -1,49 +1,40 @@
-.animated {
-  animation-fill-mode: both;
-  animation-duration: var(--animate-duration, 0.2s);
-  animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-
-  &.fadeInRight {
-    animation-name: fadeInRight;
+// animations.scss
+@keyframes slide-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-
-  &.fadeOutRight {
-    animation-name: fadeOutRight;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes fadeInRight {
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes overlay-show {
   from {
     opacity: 0;
-    transform: translate3d(100%, 0, 0);
   }
-
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
   }
 }
 
-@keyframes fadeOutRight {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-    transform: translate3d(100%, 0, 0);
-  }
+// New transition mixins
+@mixin transition-fast {
+  transition: all var(--motion-fast) ease-out;
 }
 
-.dropdown-animation {
-  opacity: 0;
-  animation: fadeMoveDown 0.15s forwards;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes fadeMoveDown {
-  to {
-    opacity: 1;
-    transform: translateY(6px);
-  }
+@mixin transition-normal {
+  transition: all var(--motion-normal) ease-in-out;
 }
