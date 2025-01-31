@@ -1,24 +1,48 @@
-@use 'variables.scss';
-@use 'z-index.scss';
-@use 'animations.scss';
-@use 'components/terminal.scss';
-@use 'components/resize-handle.scss';
-@use 'components/code.scss';
-@use 'components/editor.scss';
-@use 'components/toast.scss';
-
-html,
-body {
-  height: 100%;
-  width: 100%;
-}
+// index.scss
+@use 'variables' as *;
+@use 'animations';
+@use 'z-index';
 
 :root {
-  --gradient-opacity: 0.8;
-  --primary-color: rgba(158, 117, 240, var(--gradient-opacity));
-  --secondary-color: rgba(138, 43, 226, var(--gradient-opacity));
-  --accent-color: rgba(128, 59, 239, var(--gradient-opacity));
-  // --primary-color: rgba(147, 112, 219, var(--gradient-opacity));
-  // --secondary-color: rgba(138, 43, 226, var(--gradient-opacity));
-  // --accent-color: rgba(180, 170, 220, var(--gradient-opacity));
+  color-scheme: light dark;
+}
+
+body {
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-text-primary));
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+// New base components
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+  
+  @media (min-width: 640px) {
+    max-width: 640px;
+  }
+  @media (min-width: 768px) {
+    max-width: 768px;
+  }
+  @media (min-width: 1024px) {
+    max-width: 1024px;
+  }
+  @media (min-width: 1280px) {
+    max-width: 1280px;
+  }
+}
+
+.surface {
+  background-color: rgb(var(--color-surface));
+  border: 1px solid rgb(var(--color-border));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  @include animations.transition-normal;
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+  }
 }
