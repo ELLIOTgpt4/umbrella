@@ -1,33 +1,15 @@
-$zIndexMax: 999;
+// z-index.scss
+$z-layers: (
+  "modal": 1000,
+  "overlay": 900,
+  "dropdown": 800,
+  "header": 700,
+  "sidebar": 600,
+  "tooltip": 500,
+  "content": 100,
+  "base": 1
+);
 
-.z-logo {
-  z-index: $zIndexMax - 1;
-}
-
-.z-sidebar {
-  z-index: $zIndexMax - 2;
-}
-
-.z-port-dropdown {
-  z-index: $zIndexMax - 3;
-}
-
-.z-iframe-overlay {
-  z-index: $zIndexMax - 4;
-}
-
-.z-prompt {
-  z-index: 2;
-}
-
-.z-workbench {
-  z-index: 3;
-}
-
-.z-file-tree-breadcrumb {
-  z-index: $zIndexMax - 1;
-}
-
-.z-max {
-  z-index: $zIndexMax;
+@function z($layer) {
+  @return map-get($z-layers, $layer);
 }
